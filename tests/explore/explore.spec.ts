@@ -1,8 +1,5 @@
 import { describe, it } from 'mocha';
-import * as assert from "assert";
 
-describe('some test', () => {
-   it('does a thing', () => {
-      assert.equal("abc", "def")
-   });
+describe('exploring', () => {
+   it('lets you explore hexes that have yet to be travelled to', () => {});
 });

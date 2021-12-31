@@ -1,69 +1,6 @@
 import { beforeEach, describe, it } from "mocha";
 import { expect } from "chai";
-
-class Hex {
-  private readonly parent: HexGrid;
-  private readonly x: number;
-  private readonly y: number;
-
-  constructor(parent: HexGrid, x: number, y: number) {
-    this.parent = parent;
-    this.x = x;
-    this.y = y;
-  }
-
-  get neighbors(): Hex[] {
-    return this.parent.neighborsOf(this.x, this.y);
-  }
-}
-
-class HexGrid {
-  private readonly hexArray: Hex[][]
-
-  constructor(width: number, height: number) {
-    this.hexArray = Array.from(new Array(height))
-      .map((_, y) => Array.from(new Array(width))
-        .map((_, x) => new Hex(this, x, y)));
-  }
-
-  at(x: number, y: number): Hex {
-    return this.hexArray[y][x];
-  }
-
-  neighborsOf(x: number, y: number): Hex[] {
-    const above = y - 1
-    const below = y + 1
-    const left = x - 1;
-    const right = x + 1;
-    const offset = y % 2 == 0 ? -1 : 1
-
-    const row = this.hexArray[y];
-    const aboveRow = (this.hexArray[above] || []);
-    const belowRow = (this.hexArray[below] || []);
-
-    const leftHex = row[left];
-    const rightHex = row[right];
-    const aboveHex = aboveRow[x];
-    const belowHex = belowRow[x];
-    const aboveHex2 = aboveRow[x + offset];
-    const belowHex2 = belowRow[x + offset];
-
-    return [
-      leftHex,
-      rightHex,
-      aboveHex,
-      belowHex,
-      aboveHex2,
-      belowHex2
-    ]
-      .filter(hex => hex !== undefined);
-  }
-}
-
-// A B C
-//  D E F
-// Z Y X
-//  W V U
+import { HexGrid } from "../src/hexgrid";
 
 describe('a hex grid', () => {
   describe('with a single hex', () => {
@@ -140,7 +77,7 @@ describe('a hex grid', () => {
       ]);
     });
 
-    it('E is neighbors to B, C, D, E, F, Y, and X', () => {
+    it('E is neighbors to B, C, D, F, Y, and X', () => {
       expect(grid.at(1, 1).neighbors).to.have.members([
         grid.at(1, 0),
         grid.at(2, 0),
