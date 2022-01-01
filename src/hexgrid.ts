@@ -18,10 +18,18 @@ export class Hex<T = void> {
 export class HexGrid<T = void> {
   private readonly hexArray: Hex<T>[][]
 
-  constructor(width: number, height: number) {
+  constructor(
+    width: number,
+    height: number,
+    initializeFn?: () => T,
+  ) {
     this.hexArray = Array.from(new Array(height))
       .map((_, y) => Array.from(new Array(width))
-        .map((_, x) => new Hex(this, x, y)));
+        .map((_, x) => {
+          const hex = new Hex(this, x, y);
+          hex.content = initializeFn ? initializeFn() : undefined;
+          return hex;
+        }));
   }
 
   at(x: number, y: number): Hex<T> {
