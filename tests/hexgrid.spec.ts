@@ -161,6 +161,20 @@ describe('a hex grid', () => {
         expect(grid.at(0, 0).content).to.eql(thing);
       }));
     });
+
+    it('passes the initializing hex to the initialize function', () => {
+      const grid = new HexGrid<string>(3, 3, (hex) => `${hex.x},${hex.y}`);
+
+      expect(grid.at(0, 0).content).to.eql('0,0');
+      expect(grid.at(1, 0).content).to.eql('1,0');
+      expect(grid.at(2, 0).content).to.eql('2,0');
+      expect(grid.at(0, 1).content).to.eql('0,1');
+      expect(grid.at(1, 1).content).to.eql('1,1');
+      expect(grid.at(2, 1).content).to.eql('2,1');
+      expect(grid.at(0, 2).content).to.eql('0,2');
+      expect(grid.at(1, 2).content).to.eql('1,2');
+      expect(grid.at(2, 2).content).to.eql('2,2');
+    });
   });
 });
 

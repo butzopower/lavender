@@ -1,7 +1,7 @@
 export class Hex<T = void> {
   private readonly parent: HexGrid<T>;
-  private readonly x: number;
-  private readonly y: number;
+  readonly x: number;
+  readonly y: number;
   content: T | undefined;
 
   constructor(parent: HexGrid<T>, x: number, y: number) {
@@ -21,13 +21,13 @@ export class HexGrid<T = void> {
   constructor(
     width: number,
     height: number,
-    initializeFn?: () => T,
+    initializeFn?: (hex: Hex<T>) => T,
   ) {
     this.hexArray = Array.from(new Array(height))
       .map((_, y) => Array.from(new Array(width))
         .map((_, x) => {
           const hex = new Hex(this, x, y);
-          hex.content = initializeFn ? initializeFn() : undefined;
+          hex.content = initializeFn ? initializeFn(hex) : undefined;
           return hex;
         }));
   }
