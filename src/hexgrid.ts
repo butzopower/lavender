@@ -1,13 +1,21 @@
+type InitHexFn<T> = (hex: Hex<T>) => T;
+
 export class Hex<T = void> {
   private readonly parent: HexGrid<T>;
   readonly x: number;
   readonly y: number;
   content: T | undefined;
 
-  constructor(parent: HexGrid<T>, x: number, y: number) {
+  constructor(
+    parent: HexGrid<T>,
+    x: number,
+    y: number,
+    initializeFn?: InitHexFn<T>,
+  ) {
     this.parent = parent;
     this.x = x;
     this.y = y;
+    this.content = initializeFn? initializeFn(this) : undefined;
   }
 
   get neighbors(): Hex<T>[] {
@@ -21,15 +29,11 @@ export class HexGrid<T = void> {
   constructor(
     width: number,
     height: number,
-    initializeFn?: (hex: Hex<T>) => T,
+    initializeFn?: InitHexFn<T>,
   ) {
     this.hexArray = Array.from(new Array(height))
       .map((_, y) => Array.from(new Array(width))
-        .map((_, x) => {
-          const hex = new Hex(this, x, y);
-          hex.content = initializeFn ? initializeFn(hex) : undefined;
-          return hex;
-        }));
+        .map((_, x) => new Hex(this, x, y, initializeFn)));
   }
 
   at(x: number, y: number): Hex<T> {
