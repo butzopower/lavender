@@ -1,5 +1,6 @@
 import { beforeEach, describe, it } from "mocha";
 import { expect } from "chai";
+import * as fc from "fast-check";
 import { HexGrid } from "../src/hexgrid";
 
 describe('a hex grid', () => {
@@ -150,3 +151,15 @@ describe('a hex grid', () => {
     });
   });
 });
+
+describe('a hex', () => {
+  it('can store content', () => {
+    fc.assert(fc.property(fc.anything(), thing => {
+      const grid = new HexGrid<unknown>(1, 1);
+      const hex = grid.at(0, 0);
+
+      hex.content = thing;
+      expect(grid.at(0, 0).content).to.eql(thing);
+    }));
+  });
+})

@@ -1,21 +1,22 @@
-export class Hex {
-  private readonly parent: HexGrid;
+export class Hex<T = void> {
+  private readonly parent: HexGrid<T>;
   private readonly x: number;
   private readonly y: number;
+  content: T | undefined;
 
-  constructor(parent: HexGrid, x: number, y: number) {
+  constructor(parent: HexGrid<T>, x: number, y: number) {
     this.parent = parent;
     this.x = x;
     this.y = y;
   }
 
-  get neighbors(): Hex[] {
+  get neighbors(): Hex<T>[] {
     return this.parent.neighborsOf(this.x, this.y);
   }
 }
 
-export class HexGrid {
-  private readonly hexArray: Hex[][]
+export class HexGrid<T = void> {
+  private readonly hexArray: Hex<T>[][]
 
   constructor(width: number, height: number) {
     this.hexArray = Array.from(new Array(height))
@@ -23,11 +24,11 @@ export class HexGrid {
         .map((_, x) => new Hex(this, x, y)));
   }
 
-  at(x: number, y: number): Hex {
+  at(x: number, y: number): Hex<T> {
     return this.hexArray[y][x];
   }
 
-  neighborsOf(x: number, y: number): Hex[] {
+  neighborsOf(x: number, y: number): Hex<T>[] {
     const above = y - 1
     const below = y + 1
     const left = x - 1;
