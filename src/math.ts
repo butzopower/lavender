@@ -24,3 +24,14 @@ type _Sub<
     Take['length'] extends AmountToSub ?
       _Sub<N, AmountToSub, Take, [unknown, ...Left], [unknown, ...All]>:
       _Sub<N, AmountToSub, [unknown, ...Take], [], [unknown, ...All]>;
+
+
+// tests
+const zeroAddZero: Add<0, 0> = 0;
+const onePlusTwo: Add<1, 2> = 3;
+const twoPlusOne: Add<2, 1> = 3;
+const fivePlusEightPlusSeven: Add<5, Add<8, 7>> = 20;
+
+const zeroMinusZero: Sub<0, 0> = 0;
+const twoMinusOne: Sub<2, 1> = 1;
+const twentyMinusEightMinusSeven: Sub<20, Sub<8, 7>> = 19;
