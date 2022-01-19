@@ -1,9 +1,9 @@
-import { type Add } from './math';
+export type D<Size extends number> = number extends Size ? number :_D<Size, [], [unknown]>;
 
-export type D<T extends number> = number extends T ? number :_D<T, []>;
-type _D<T extends number, R extends number[]> = R['length'] extends T ?
-  R[number] :
-  _D<T, [...R, Add<R['length'], 1>]>;
+type _D<Size extends number, Choices extends number[], Count extends unknown[]> =
+  Choices['length'] extends Size ?
+    Choices[number] :
+    _D<Size, [...Choices, Count['length']], [...Count, unknown]>;
 
 export interface Dice<T extends number> {
   roll(): D<T>
