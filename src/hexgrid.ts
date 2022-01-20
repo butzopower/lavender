@@ -64,15 +64,11 @@ export class HexGrid<T = void> {
       .filter(hex => hex !== undefined);
   }
 
-  map<U>(mappingFunction: (x: Hex<T>) => U): HexGrid<U> {
-    const originalHex = (hex: Hex<U>) => {
-      return this.at(hex.x, hex.y);
-    }
-
+  map<U>(mappingFunction: (value: Hex<T>) => U): HexGrid<U> {
     return new HexGrid<U>(
       this.width,
       this.height,
-      (hex) => mappingFunction(originalHex(hex))
+      (hex) => mappingFunction(this.at(hex.x, hex.y))
     );
   }
 }
