@@ -6,12 +6,7 @@ export class Hex<T = void> {
   readonly y: number;
   content: T | undefined;
 
-  constructor(
-    parent: HexGrid<T>,
-    x: number,
-    y: number,
-    initializeFn?: InitHexFn<T>,
-  ) {
+  constructor(parent: HexGrid<T>, x: number, y: number, initializeFn?: InitHexFn<T>) {
     this.parent = parent;
     this.x = x;
     this.y = y;
@@ -27,8 +22,8 @@ export class HexGrid<T = void> {
   private readonly hexArray: Hex<T>[][]
 
   constructor(
-    width: number,
-    height: number,
+    private width: number,
+    private height: number,
     initializeFn?: InitHexFn<T>,
   ) {
     this.hexArray = Array.from(new Array(height))
@@ -67,5 +62,17 @@ export class HexGrid<T = void> {
       belowHex2
     ]
       .filter(hex => hex !== undefined);
+  }
+
+  map<U>(mappingFunction: (x: Hex<T>) => U): HexGrid<U> {
+    const originalHex = (hex: Hex<unknown>) => {
+      return this.at(hex.x, hex.y);
+    }
+
+    return new HexGrid<U>(
+      this.width,
+      this.height,
+      (hex) => mappingFunction(originalHex(hex))
+    );
   }
 }

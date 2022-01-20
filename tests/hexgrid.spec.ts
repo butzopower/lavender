@@ -176,6 +176,43 @@ describe('a hex grid', () => {
       expect(grid.at(2, 2).content).to.eql('2,2');
     });
   });
+
+  describe('mapping over the grid', () => {
+    it('returns a new grid with the mapped values', () => {
+      fc.assert(fc.property(fc.anything(), thing => {
+        const originalGrid = new HexGrid<string>(1, 1, () => '');
+        const grid = originalGrid.map(() => thing);
+
+        expect(grid.at(0, 0).content).to.eql(thing);
+      }));
+    });
+
+    it('passes the original hex properties into the function', () => {
+      fc.assert(fc.property(fc.anything(), fc.anything(), (thing, thing2) => {
+        const originalGrid = new HexGrid<unknown>(3, 3, () => thing);
+        const grid = originalGrid.map((hex) => `${hex.x},${hex.y}`);
+
+        expect(grid.at(0, 0).content).to.eql('0,0');
+        expect(grid.at(1, 0).content).to.eql('1,0');
+        expect(grid.at(2, 0).content).to.eql('2,0');
+        expect(grid.at(0, 1).content).to.eql('0,1');
+        expect(grid.at(1, 1).content).to.eql('1,1');
+        expect(grid.at(2, 1).content).to.eql('2,1');
+        expect(grid.at(0, 2).content).to.eql('0,2');
+        expect(grid.at(1, 2).content).to.eql('1,2');
+        expect(grid.at(2, 2).content).to.eql('2,2');
+      }));
+    });
+
+    it('passes the original hex content into the function', () => {
+      fc.assert(fc.property(fc.anything(), fc.anything(), (thing, thing2) => {
+        const originalGrid = new HexGrid<unknown>(1, 1, () => thing);
+        const grid = originalGrid.map((x) => `${JSON.stringify(x.content)}|${JSON.stringify(thing2)}`);
+
+        expect(grid.at(0, 0).content).to.eql(`${JSON.stringify(thing)}|${JSON.stringify(thing2)}`);
+      }));
+    });
+  });
 });
 
 describe('a hex', () => {
