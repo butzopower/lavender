@@ -65,7 +65,7 @@ export class HexGrid<T = void> {
   }
 
   map<U>(mappingFunction: (x: Hex<T>) => U): HexGrid<U> {
-    const originalHex = (hex: Hex<unknown>) => {
+    const originalHex = (hex: Hex<U>) => {
       return this.at(hex.x, hex.y);
     }
 
