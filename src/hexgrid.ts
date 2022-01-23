@@ -64,7 +64,11 @@ export class HexGrid<T = void> {
       .filter(hex => hex !== undefined);
   }
 
-  map<U>(mappingFunction: (value: Hex<T>) => U): HexGrid<U> {
+  forEach(callbackFn: (hex: Hex<T>) => void) {
+    this.hexArray.flat().forEach(callbackFn);
+  }
+
+  map<U>(mappingFunction: (hex: Hex<T>) => U): HexGrid<U> {
     return new HexGrid<U>(
       this.width,
       this.height,

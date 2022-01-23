@@ -1,7 +1,8 @@
 import { beforeEach, describe, it } from "mocha";
 import { expect } from "chai";
+import { spy } from "sinon";
 import * as fc from "fast-check";
-import { HexGrid } from "../src/hexgrid";
+import { Hex, HexGrid } from "../src/hexgrid";
 
 describe('a hex grid', () => {
   describe('checking neighbors', () => {
@@ -174,6 +175,38 @@ describe('a hex grid', () => {
       expect(grid.at(0, 2).content).to.eql('0,2');
       expect(grid.at(1, 2).content).to.eql('1,2');
       expect(grid.at(2, 2).content).to.eql('2,2');
+    });
+  });
+
+  describe('iterating over the grid', () => {
+    it('passes the hex properties into the function', () => {
+      const capturedCalls: Hex<unknown>[] = [];
+      const grid = new HexGrid<unknown>(3, 3);
+
+      grid.forEach((hex) => {
+        capturedCalls.push(hex);
+      });
+
+      expect(capturedCalls[0]).to.eql(grid.at(0, 0));
+      expect(capturedCalls[1]).to.eql(grid.at(1, 0));
+      expect(capturedCalls[2]).to.eql(grid.at(2, 0));
+      expect(capturedCalls[3]).to.eql(grid.at(0, 1));
+      expect(capturedCalls[4]).to.eql(grid.at(1, 1));
+      expect(capturedCalls[5]).to.eql(grid.at(2, 1));
+      expect(capturedCalls[6]).to.eql(grid.at(0, 2));
+      expect(capturedCalls[7]).to.eql(grid.at(1, 2));
+      expect(capturedCalls[8]).to.eql(grid.at(2, 2));
+    });
+
+    it('passes the hex content into the function', () => {
+      fc.assert(fc.property(fc.anything(), fc.anything(), (thing) => {
+        const callbackSpy = spy()
+        const grid = new HexGrid(1, 1, () => thing);
+
+        grid.forEach(callbackSpy);
+
+        expect(callbackSpy.lastCall.args[0].content).to.eql(thing);
+      }));
     });
   });
 
